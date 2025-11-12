@@ -5,13 +5,19 @@
   "colors": {
     "primary": "#FF4500",
     "light": "#FF6B35",
-    "dark": "#E63E00"
+    "dark": "#E63E00",
+    "background": {
+      "dark": "#0F1117"
+    }
   },
   "favicon": "/favicon.svg",
   "metadata": {
     "og:title": "Paxeer Network - Developer Documentation",
     "og:description": "Build on Paxeer Network - A high-performance, developer-friendly blockchain platform",
-    "og:image": "/og-image.png"
+    "og:image": "/og-image.png",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "Paxeer Network Docs",
+    "twitter:description": "Complete developer documentation for Paxeer Network"
   },
   "seo": {
     "indexHiddenPages": false,
@@ -40,44 +46,62 @@
     "socials": {
       "discord": "https://discord.gg/paxeer",
       "twitter": "https://twitter.com/paxeernetwork",
-      "github": "https://github.com/paxeer"
+      "github": "https://github.com/paxeer",
+      "website": "https://paxeer.app"
     }
   },
   "navigation": {
     "tabs": [
       {
-        "tab": "Getting Started",
+        "tab": "App Developers",
         "groups": [
           {
-            "group": "Introduction",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart"
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Guides",
+            "pages": [
+              "app-developers/guides/building-apps",
+              "app-developers/guides/testing-apps",
+              {
+                "group": "Transactions",
+                "pages": [
+                  "app-developers/guides/transactions/fees",
+                  "app-developers/guides/transactions/estimates",
+                  "app-developers/guides/transactions/parameters",
+                  "app-developers/guides/transactions/statuses",
+                  "app-developers/guides/transactions/troubleshooting"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Core Documentation",
             "pages": [
               "configuration",
               "contracts",
               "api-reference",
               "rpc"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Developers",
-        "groups": [
+          },
           {
-            "group": "Build",
+            "group": "Code Examples",
             "pages": [
               "examples",
               "tools"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Ecosystem",
+        "groups": [
           {
-            "group": "Ecosystem Protocols",
+            "group": "Protocols",
             "pages": [
               "paxdex",
               "lending",
@@ -88,6 +112,40 @@
             "group": "APIs",
             "pages": [
               "blockscout-api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Node Operators",
+        "groups": [
+          {
+            "group": "Guides",
+            "pages": [
+              "node-operators/guides/running-a-node"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Concepts",
+        "groups": [
+          {
+            "group": "Architecture",
+            "pages": [
+              "concepts/architecture/overview"
+            ]
+          },
+          {
+            "group": "Security",
+            "pages": [
+              "concepts/security/best-practices"
+            ]
+          },
+          {
+            "group": "Transactions",
+            "pages": [
+              "concepts/transactions/transaction-flow"
             ]
           }
         ]
@@ -106,21 +164,27 @@
           "icon": "arrow-right-arrow-left"
         },
         {
+          "anchor": "Faucet",
+          "href": "https://faucet.paxeer.app",
+          "icon": "faucet"
+        },
+        {
+          "anchor": "Status",
+          "href": "https://status.paxeer.app",
+          "icon": "signal-bars"
+        },
+        {
           "anchor": "Discord",
           "href": "https://discord.gg/paxeer",
           "icon": "discord"
-        },
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com/paxeer",
-          "icon": "github"
         }
       ]
     }
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "/"
   },
   "navbar": {
     "links": [
@@ -133,6 +197,10 @@
         "href": "https://paxeer.app/community"
       },
       {
+        "label": "Blog",
+        "href": "https://paxeer.app/blog"
+      },
+      {
         "label": "Support",
         "href": "https://discord.gg/paxeer"
       }
@@ -142,5 +210,24 @@
       "label": "Get Started",
       "href": "https://paxeernetworkprotocol.mintlify.app/"
     }
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/paxeer"
+    }
+  ],
+  "topbarCtaButton": {
+    "type": "button",
+    "name": "Launch App",
+    "url": "https://app.paxeer.app"
+  },
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXXXX"
+    }
+  },
+  "search": {
+    "prompt": "Search Paxeer Network docs..."
   }
 }

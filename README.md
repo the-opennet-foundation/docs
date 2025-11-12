@@ -1,134 +1,314 @@
 # Paxeer Network Documentation
 
-This directory contains the complete documentation for Paxeer Network, converted from the v0-paxeer-network-docs Next.js application into proper MDX format for documentation platforms like Mintlify.
+Professional documentation for Paxeer Network, built with [Mintlify](https://mintlify.com) framework inspired by [Optimism's documentation structure](https://github.com/ethereum-optimism/docs).
 
-## Conversion Summary
+## 🚀 Quick Start
 
-All content from `/root/v0-paxeer-network-docs` has been successfully converted from React/TypeScript components to MDX documentation format with proper:
+```bash
+# Install Mintlify CLI
+npm install -g mintlify
 
-- ✅ MDX frontmatter with titles, descriptions, and icons
-- ✅ Proper code snippets with syntax highlighting
-- ✅ Tab groups for multi-language examples
-- ✅ Accordion groups for expandable sections
-- ✅ Card components for navigation
-- ✅ Callout components (Info, Warning, Tip, Note)
-- ✅ Step-by-step guides
-- ✅ API reference documentation
-- ✅ Complete code examples
+# Preview documentation locally
+mintlify dev
 
-## Documentation Structure
+# Build for production
+mintlify build
+```
 
-### Core Documentation
+## 📁 Documentation Structure
 
-1. **index.mdx** - Home page with network overview and quick navigation
-2. **quickstart.mdx** - Getting started guide with wallet setup and wagmi configuration
-3. **configuration.mdx** - Network configuration for wagmi, viem, ethers.js, and web3.js
-4. **contracts.mdx** - Smart contract deployment with Hardhat, Foundry, and Remix
-5. **api-reference.mdx** - Complete JSON-RPC API reference
-6. **rpc.mdx** - Interactive RPC method testing guide
-7. **examples.mdx** - Code examples for wallet connection, transactions, and contracts
-8. **tools.mdx** - SDKs and development tools
+### Core Documentation (Root Level)
 
-### Ecosystem Protocols
+```
+/root/docs/
+├── index.mdx                    # Home page
+├── quickstart.mdx              # Getting started guide
+├── configuration.mdx           # Network configuration
+├── contracts.mdx               # Smart contracts guide
+├── api-reference.mdx           # JSON-RPC API reference
+├── rpc.mdx                     # RPC methods testing
+├── examples.mdx                # Code examples
+├── tools.mdx                   # SDKs and tools
+├── paxdex.mdx                 # PaxDex protocol
+├── lending.mdx                # Lending protocol
+├── ctm.mdx                    # Computable Token Machine
+├── blockscout-api.mdx         # BlockScout API
+└── docs.json                  # Mintlify configuration
+```
 
-9. **paxdex.mdx** - Decentralized exchange protocol documentation
-   - REST API endpoints
-   - WebSocket integration
-   - Smart contract addresses
-   - Swap implementation examples
+### App Developers Section
 
-10. **lending.mdx** - Lending protocol documentation
-    - API endpoints
-    - Smart contract functions
-    - Credit scoring system
-    - Integration guides
+```
+app-developers/
+├── guides/
+│   ├── building-apps.mdx              # Development guide
+│   ├── testing-apps.mdx               # Testing best practices
+│   └── transactions/
+│       ├── fees.mdx                   # Fee structure
+│       ├── estimates.mdx              # Cost estimation
+│       ├── parameters.mdx             # Gas parameters
+│       ├── statuses.mdx               # Transaction states
+│       └── troubleshooting.mdx        # Common issues
+└── [tutorials, reference folders ready for expansion]
+```
 
-11. **ctm.mdx** - Computable Token Machine documentation
-    - Diamond Standard (EIP-2535) implementation
-    - Program creation guide
-    - Security best practices
-    - Advanced examples
+### Node Operators Section
 
-12. **blockscout-api.mdx** - BlockScout API documentation
-    - Search and discovery
-    - Transaction queries
-    - Address information
-    - Token data
-    - Network statistics
+```
+node-operators/
+└── guides/
+    └── running-a-node.mdx             # Node setup guide
+```
 
-## Network Information
+### Concepts Section
 
+```
+concepts/
+├── architecture/
+│   └── overview.mdx                   # Architecture overview
+├── security/
+│   └── best-practices.mdx             # Security guide
+└── transactions/
+    └── transaction-flow.mdx           # Transaction lifecycle
+```
+
+## 🎨 Framework Features
+
+Based on [Optimism's Professional Documentation](https://docs.optimism.io):
+
+### Mintlify Features
+- ✅ **Multi-tab navigation** - Organized by user type
+- ✅ **Global anchors** - Quick access to key resources
+- ✅ **Feedback system** - Thumbs rating, suggest edits, raise issues
+- ✅ **SEO optimization** - Complete meta tags and social cards
+- ✅ **Dark/Light mode** - Automatic theme switching
+- ✅ **Search** - Full-text documentation search
+- ✅ **Code groups** - Multi-language examples
+- ✅ **Interactive components** - Tabs, accordions, cards
+- ✅ **Contextual AI** - ChatGPT and Claude integration
+
+### Custom Configuration
+- **Brand Colors:** Orange/Red theme (`#FF4500`)
+- **Dark Mode Default:** Optimized for developer experience
+- **Social Links:** Discord, Twitter, GitHub
+- **Global Anchors:** Explorer, PaxDex, Faucet, Status
+- **Primary CTA:** "Get Started" button
+- **Top Bar:** GitHub link + Launch App button
+
+## 📚 Documentation Coverage
+
+### ✅ Complete Pages (24 total)
+
+#### Getting Started
+1. **index.mdx** - Network overview with navigation
+2. **quickstart.mdx** - Step-by-step setup guide
+
+#### Core Documentation
+3. **configuration.mdx** - wagmi, viem, ethers.js, web3.js
+4. **contracts.mdx** - Hardhat, Foundry, Remix deployment
+5. **api-reference.mdx** - Complete JSON-RPC API
+6. **rpc.mdx** - RPC method testing guide
+7. **examples.mdx** - Integration examples
+8. **tools.mdx** - Development tools & SDKs
+
+#### Ecosystem Protocols
+9. **paxdex.mdx** - DEX protocol (REST + WebSocket)
+10. **lending.mdx** - Lending protocol with credit scoring
+11. **ctm.mdx** - Computable Token Machine guide
+12. **blockscout-api.mdx** - Explorer API documentation
+
+#### App Developer Guides
+13. **app-developers/guides/building-apps.mdx**
+14. **app-developers/guides/testing-apps.mdx**
+15. **app-developers/guides/transactions/fees.mdx**
+16. **app-developers/guides/transactions/estimates.mdx**
+17. **app-developers/guides/transactions/parameters.mdx**
+18. **app-developers/guides/transactions/statuses.mdx**
+19. **app-developers/guides/transactions/troubleshooting.mdx**
+
+#### Node Operators
+20. **node-operators/guides/running-a-node.mdx**
+
+#### Concepts
+21. **concepts/architecture/overview.mdx**
+22. **concepts/security/best-practices.mdx**
+23. **concepts/transactions/transaction-flow.mdx**
+
+#### Configuration
+24. **docs.json** - Complete Mintlify configuration
+
+## 🎯 Navigation Structure
+
+### Tab 1: App Developers
+- **Getting Started** → index, quickstart
+- **Guides** → building-apps, testing-apps, transactions (5 pages)
+- **Core Documentation** → configuration, contracts, api-reference, rpc
+- **Code Examples** → examples, tools
+
+### Tab 2: Ecosystem
+- **Protocols** → PaxDex, Lending, CTM
+- **APIs** → BlockScout API
+
+### Tab 3: Node Operators
+- **Guides** → Running a node
+
+### Tab 4: Concepts
+- **Architecture** → Overview
+- **Security** → Best practices
+- **Transactions** → Transaction flow
+
+## 🔧 Technical Specifications
+
+### Network Details
 - **Chain ID:** 229
 - **Currency:** PAX (Paxeer)
+- **Block Time:** ~2 seconds
+- **Gas Limit:** 30,000,000
 - **RPC URL:** https://public-rpc.paxeer.app/rpc
-- **Block Explorer:** https://scan.paxeer.app
-- **Explorer API:** https://scan.paxeer.app/api
+- **Explorer:** https://scan.paxeer.app
 
-## Key Features Documented
+### Ecosystem
+- **PaxDex:** DEX with 0.3% fees, 12 tokens, WebSocket support
+- **Lending:** Credit scoring, dynamic APY, multi-asset
+- **CTM:** Diamond Standard (EIP-2535) token implementation
 
-### Developer Tools
-- Hardhat configuration and deployment
-- Foundry setup and usage
-- Remix IDE integration
-- wagmi React hooks
-- viem TypeScript integration
-- ethers.js v6 examples
-- web3.js v4 examples
+## 📖 Content Features
 
-### Protocols
-- **PaxDex**: DEX with 0.3% fees, 12 tokens, WebSocket support
-- **Lending**: Credit scoring, dynamic APY, multi-asset support
-- **CTM**: Revolutionary token standard with modular programs
-
-### APIs
-- JSON-RPC Ethereum-compatible API
-- PaxDex REST API
-- Lending REST API
-- BlockScout REST API
-- Real-time WebSocket feeds
-
-## MDX Components Used
-
-The documentation uses standard MDX components compatible with Mintlify:
-
-- `<Card>` - Clickable navigation cards
-- `<CardGroup>` - Grid layouts for cards
-- `<Tabs>` / `<Tab>` - Tabbed content
-- `<Accordion>` / `<AccordionGroup>` - Expandable sections
+### MDX Components Used
+- `<Card>` / `<CardGroup>` - Navigation and feature cards
+- `<Tabs>` / `<Tab>` - Multi-framework examples
+- `<Accordion>` / `<AccordionGroup>` - Expandable content
 - `<Steps>` / `<Step>` - Step-by-step guides
 - `<CodeGroup>` - Multi-language code examples
-- `<Info>`, `<Warning>`, `<Tip>`, `<Note>` - Callout boxes
+- `<Info>`, `<Warning>`, `<Tip>`, `<Note>` - Callouts
 - `<ParamField>` - API parameter documentation
 
-## Code Examples
+### Code Examples Coverage
+- ✅ TypeScript / JavaScript
+- ✅ Python
+- ✅ Bash / cURL
+- ✅ Solidity
+- ✅ ethers.js v6
+- ✅ viem
+- ✅ wagmi
+- ✅ web3.js v4
 
-All code examples include:
-- Syntax-highlighted code blocks
-- Multiple language versions (TypeScript, JavaScript, Python, Bash)
-- Working examples that can be copy-pasted
-- Proper error handling
-- Best practices
+### Documentation Quality
+- ✅ Proper frontmatter (title, description, icon)
+- ✅ Syntax highlighting
+- ✅ Working code examples
+- ✅ Error handling examples
+- ✅ Best practices sections
+- ✅ Troubleshooting guides
+- ✅ Cross-references
+- ✅ External resource links
 
-## Notes
+## 🚀 Deployment
 
-- The Smart Library and ERC20 Library pages were originally interactive file browsers, so they weren't converted to static MDX (marked as cancelled in todos)
-- The API Explorer was also an interactive tool and wasn't converted (marked as cancelled)
-- All static content has been successfully converted with proper formatting
-- Code snippets use proper language tags for syntax highlighting
-- All network-specific information has been preserved
+### Deploy to Mintlify
 
-## Next Steps
+1. **Connect Repository:**
+   ```bash
+   # Push to GitHub
+   git init
+   git add .
+   git commit -m "Initial Paxeer Network documentation"
+   git remote add origin https://github.com/yourusername/paxeer-docs
+   git push -u origin main
+   ```
 
-To use this documentation:
+2. **Link to Mintlify:**
+   - Go to [mintlify.com](https://mintlify.com)
+   - Connect your GitHub repository
+   - Auto-deploy on push
 
-1. Set up a Mintlify project or similar documentation platform
-2. Copy these MDX files to your docs directory
-3. Configure your `docs.json` or equivalent navigation file
-4. Deploy your documentation
+3. **Custom Domain (Optional):**
+   - Configure in Mintlify dashboard
+   - Point DNS to Mintlify
+   - Example: `docs.paxeer.app`
 
-## Original Source
+### Local Development
 
-Converted from: `/root/v0-paxeer-network-docs`
-- Original format: Next.js/React/TypeScript application
-- Converted to: MDX documentation format
-- Conversion date: 2025-11-12
+```bash
+# Install dependencies
+npm install -g mintlify
+
+# Run dev server
+mintlify dev
+
+# Open browser
+open http://localhost:3000
+```
+
+## 📝 Content Sources
+
+### Converted from v0-paxeer-network-docs
+- Original: Next.js/React application
+- Converted: 12 core MDX pages
+- Format: Proper MDX with code snippets
+
+### Inspired by Optimism Docs
+- Framework: Professional Mintlify structure
+- Navigation: Multi-tab organization
+- Content: Technical depth and quality
+- Components: Rich MDX components
+
+## 🎨 Customization
+
+### Colors
+Primary: `#FF4500` (Orange-Red)
+Light: `#FF6B35`
+Dark: `#E63E00`
+
+### Branding
+- Logo: `/logo/light.svg` and `/logo/dark.svg`
+- Favicon: `/favicon.svg`
+- OG Image: `/og-image.png`
+
+## 📊 Analytics
+
+Add your analytics IDs in `docs.json`:
+
+```json
+"analytics": {
+  "ga4": {
+    "measurementId": "G-XXXXXXXXXX"
+  },
+  "mixpanel": {
+    "projectToken": "your_token_here"
+  }
+}
+```
+
+## 🔗 Important Links
+
+- **Website:** https://paxeer.app
+- **Explorer:** https://scan.paxeer.app
+- **RPC:** https://public-rpc.paxeer.app/rpc
+- **Discord:** https://discord.gg/paxeer
+- **GitHub:** https://github.com/paxeer
+
+## 📄 License
+
+MIT License - See LICENSE file for details
+
+## 🤝 Contributing
+
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Add/update documentation
+4. Test locally with `mintlify dev`
+5. Submit a pull request
+
+## 📞 Support
+
+- **Discord:** [discord.gg/paxeer](https://discord.gg/paxeer)
+- **GitHub Issues:** [github.com/paxeer/docs/issues](https://github.com/paxeer/docs/issues)
+- **Email:** support@paxeer.app
+
+---
+
+**Built with ❤️ by the Paxeer team**
+
+**Framework:** Inspired by [Optimism Docs](https://github.com/ethereum-optimism/docs) • **Platform:** [Mintlify](https://mintlify.com)
