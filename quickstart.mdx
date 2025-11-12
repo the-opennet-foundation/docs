@@ -1,80 +1,186 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: "Quick Start"
+description: "Get started with Paxeer Network in just a few minutes"
+icon: "rocket"
 ---
 
-## Get started in three steps
+<Info>
+**Prerequisites:** You'll need MetaMask or another Web3 wallet installed in your browser.
+</Info>
 
-Get your documentation site running locally and make your first customization.
+## Step 1: Install Web3 Wallet
 
-### Step 1: Set up your local environment
+If you don't have a Web3 wallet yet, install MetaMask from their official website:
+
+```bash
+https://metamask.io
+```
+
+## Step 2: Add Paxeer Network
+
+Add Paxeer Network to your MetaMask with these settings:
 
 <AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+  <Accordion title="Manual Configuration">
+    Open MetaMask, go to **Settings** → **Networks** → **Add Network**, and enter:
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
+    | Field | Value |
+    |-------|-------|
+    | Network Name | Paxeer Network |
+    | RPC URL | `https://public-rpc.paxeer.app/rpc` |
+    | Chain ID | `229` |
+    | Currency Symbol | PAX |
+    | Block Explorer | `https://scan.paxeer.app` |
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
+  
+  <Accordion title="One-Click Add">
+    <Card
+      title="Add to MetaMask"
+      icon="wallet"
+      href="https://chainlist.org/?search=paxeer"
+    >
+      Use ChainList for automatic network configuration
+    </Card>
   </Accordion>
 </AccordionGroup>
 
-### Step 2: Deploy your changes
+### Network Details
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+```json
+{
+  "networkName": "Paxeer Network",
+  "rpcUrl": "https://public-rpc.paxeer.app/rpc",
+  "chainId": 229,
+  "currencySymbol": "PAX",
+  "blockExplorer": "https://scan.paxeer.app"
+}
+```
+
+## Step 3: Connect with wagmi
+
+Use wagmi to connect to Paxeer Network in your React app:
+
+```typescript wagmi-config.ts
+import { createConfig, http } from 'wagmi'
+import { defineChain } from 'viem'
+
+const paxeer = defineChain({
+  id: 229,
+  name: 'Paxeer Network',
+  network: 'paxeer',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Paxeer',
+    symbol: 'PAX',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://public-rpc.paxeer.app/rpc'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'PaxeerScan',
+      url: 'https://scan.paxeer.app',
+    },
+  },
+})
+
+export const config = createConfig({
+  chains: [paxeer],
+  transports: {
+    [paxeer.id]: http(),
+  },
+})
+```
+
+<Tip>
+Make sure to wrap your app with `WagmiProvider` and pass the config.
+</Tip>
+
+## Step 4: Start Building
+
+You're all set! Now you can:
+
+<Steps>
+  <Step title="Deploy Smart Contracts">
+    Use Hardhat, Foundry, or Remix to deploy your contracts
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    <Card
+      title="Smart Contracts Guide"
+      icon="code"
+      href="/contracts"
+    >
+      Learn how to deploy contracts on Paxeer Network
+    </Card>
+  </Step>
+  
+  <Step title="Interact with the Blockchain">
+    Read and write data using our JSON-RPC API
+    
+    <Card
+      title="API Reference"
+      icon="terminal"
+      href="/api-reference"
+    >
+      Explore all available RPC methods
+    </Card>
+  </Step>
+  
+  <Step title="Build User Interfaces">
+    Create dApps using wagmi, viem, or ethers.js
+    
+    <Card
+      title="Code Examples"
+      icon="brackets-curly"
+      href="/examples"
+    >
+      Check out our integration examples
+    </Card>
+  </Step>
+</Steps>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
-
-### Step 3: Go live
-
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
-
-## Next steps
-
-Now that you have your docs running, explore these key features:
+## Next Steps
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card
+    title="Configuration"
+    icon="gear"
+    href="/configuration"
+  >
+    Configure Paxeer Network with different libraries
+  </Card>
+  <Card
+    title="RPC Methods"
+    icon="terminal"
+    href="/rpc"
+  >
+    Test RPC methods in real-time
+  </Card>
+  <Card
+    title="Network Tools"
+    icon="toolbox"
+    href="/tools"
+  >
+    Explore recommended SDKs and tools
+  </Card>
+  <Card
+    title="API Explorer"
+    icon="radar"
+    href="/api-explorer"
+  >
+    Interactive API testing interface
+  </Card>
 </CardGroup>
 
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+## Need Help?
+
+Check out our API Reference and RPC Methods pages to learn more about interacting with Paxeer Network, or join our community for support.
+
+<Card
+  title="Join Community"
+  icon="users"
+  href="https://paxeer.app/community"
+>
+  Get help from other developers building on Paxeer
+</Card>
