@@ -95,6 +95,24 @@
         ]
       },
       {
+        "tab": "Protocol",
+        "groups": [
+          {
+            "group": "Core Infrastructure",
+            "pages": [
+              "argus-vm",
+              "opax-28"
+            ]
+          },
+          {
+            "group": "About",
+            "pages": [
+              "concepts/architecture/overview"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Ecosystem",
         "groups": [
           {

@@ -1,0 +1,585 @@
+---
+title: "ArgusVM (AVM)"
+description: "Register-based virtual machine for Paxeer Network - EVM-compatible but not EVM-dependent"
+icon: "microchip"
+---
+
+## Overview
+
+ArgusVM (AVM) is Paxeer Network's native register-based virtual machine designed for high-performance smart contract execution. Built from the ground up for blockchain applications, ArgusVM provides **256-bit native arithmetic**, **deterministic gas metering**, and **superior performance** compared to stack-based architectures.
+
+<Warning>
+**Revolutionary Architecture:** ArgusVM represents Paxeer's path to becoming the **first EVM L2 to transition into EVM-compatibility without EVM-dependency**. We maintain full compatibility while building a fully self-sustainable ecosystem.
+</Warning>
+
+<CardGroup cols={3}>
+  <Card title="Register-Based" icon="memory">
+    Faster execution than stack-based VMs (no push/pop overhead)
+  </Card>
+  <Card title="256-bit Native" icon="calculator">
+    First-class support for cryptographic operations
+  </Card>
+  <Card title="EVM Compatible" icon="link">
+    Compatible with EVM but not dependent on it
+  </Card>
+</CardGroup>
+
+## Why ArgusVM?
+
+### The Path to Independence
+
+Paxeer Network is pioneering a new approach: **EVM-compatible but EVM-independent**. While we maintain full compatibility with existing Ethereum tooling and contracts, we're building our own execution environment that doesn't rely on EVM infrastructure.
+
+<AccordionGroup>
+  <Accordion title="Self-Sustainable Ecosystem" icon="globe">
+    ArgusVM enables Paxeer to operate independently:
+    
+    - Native execution environment
+    - Custom gas model optimized for our architecture
+    - Register-based design for better performance
+    - Full control over VM evolution
+  </Accordion>
+
+  <Accordion title="EVM Compatibility" icon="code-branch">
+    Maintain compatibility while building independence:
+    
+    - Can execute EVM bytecode (via translation layer)
+    - Supports existing Ethereum tooling
+    - Seamless migration path for developers
+    - Bridge compatibility maintained
+  </Accordion>
+
+  <Accordion title="Performance Benefits" icon="gauge">
+    Register-based architecture advantages:
+    
+    - **10,000+ TPS** per core (vs ~15 TPS for EVM)
+    - **<1ms latency** for simple calls
+    - **No stack manipulation** overhead
+    - **Better register allocation** for compilers
+  </Accordion>
+</AccordionGroup>
+
+## Architecture
+
+### Register Set
+
+ArgusVM uses 32 general-purpose 256-bit registers plus special-purpose registers:
+
+```rust
+// General-purpose registers (256-bit)
+r0-r31    : 32 general-purpose registers
+
+// Special-purpose registers (64-bit)
+pc        : Program counter
+sp        : Stack pointer (for call frames)
+fp        : Frame pointer (for local variables)
+gas       : Remaining gas
+status    : Status flags
+```
+
+### Status Flags
+
+64-bit status register with condition flags:
+
+```
+bit 0: ZERO      - Last operation result was zero
+bit 1: CARRY     - Arithmetic carry occurred
+bit 2: OVERFLOW  - Arithmetic overflow occurred
+bit 3: HALT      - Execution halted
+bit 4: REVERT    - Transaction should revert
+bit 5-63: Reserved
+```
+
+## Memory Model
+
+ArgusVM uses a segmented memory model optimized for smart contracts:
+
+<Card title="Memory Layout" icon="memory">
+```
+┌─────────────────────────┐ 0x00000000
+│   Code Segment          │ (Read-only, contract bytecode)
+│   (Max 24KB)            │
+├─────────────────────────┤ 0x00006000
+│   Data Segment          │ (Read/Write, initialized data)
+│   (Max 8KB)             │
+├─────────────────────────┤ 0x00008000
+│   Stack                 │ (Read/Write, grows downward)
+│   (Max 64KB)            │
+├─────────────────────────┤ 0x00018000
+│   Heap                  │ (Read/Write, dynamic allocation)
+│   (Max 128KB)           │
+└─────────────────────────┘ 0x00038000
+```
+</Card>
+
+### Storage (Persistent State)
+
+- **Key-value store**: `bytes32 → bytes32`
+- **Accessed via**: `SLOAD` and `SSTORE` opcodes
+- **Gas costs**:
+  - `SLOAD`: 200 gas (cold), 100 gas (warm)
+  - `SSTORE`: 5000 gas (cold), 200 gas (warm)
+
+## Instruction Set Architecture (ISA)
+
+### Instruction Format
+
+Fixed-width 64-bit instructions:
+
+```
+┌────────┬────────┬────────┬────────┬────────────────┐
+│ opcode │  dst   │  src1  │  src2  │   immediate    │
+│ 8-bit  │ 8-bit  │ 8-bit  │ 8-bit  │    32-bit      │
+└────────┴────────┴────────┴────────┴────────────────┘
+```
+
+### Opcode Categories
+
+<Tabs>
+  <Tab title="Arithmetic">
+    ```rust
+    0x00  NOP                    - No operation
+    0x01  ADD   dst, src1, src2  - dst = src1 + src2
+    0x02  SUB   dst, src1, src2  - dst = src1 - src2
+    0x03  MUL   dst, src1, src2  - dst = src1 * src2
+    0x04  DIV   dst, src1, src2  - dst = src1 / src2 (unsigned)
+    0x05  SDIV  dst, src1, src2  - dst = src1 / src2 (signed)
+    0x06  MOD   dst, src1, src2  - dst = src1 % src2
+    0x07  EXP   dst, src1, src2  - dst = src1 ** src2
+    0x08  ADDMOD dst, src1, src2 - dst = (src1 + src2) % imm
+    0x09  MULMOD dst, src1, src2 - dst = (src1 * src2) % imm
+    ```
+  </Tab>
+
+  <Tab title="Bitwise">
+    ```rust
+    0x10  AND   dst, src1, src2  - dst = src1 & src2
+    0x11  OR    dst, src1, src2  - dst = src1 | src2
+    0x12  XOR   dst, src1, src2  - dst = src1 ^ src2
+    0x13  NOT   dst, src1        - dst = ~src1
+    0x14  SHL   dst, src1, src2  - dst = src1 << src2
+    0x15  SHR   dst, src1, src2  - dst = src1 >> src2 (logical)
+    0x16  SAR   dst, src1, src2  - dst = src1 >> src2 (arithmetic)
+    0x17  ROL   dst, src1, src2  - dst = rotate_left(src1, src2)
+    0x18  ROR   dst, src1, src2  - dst = rotate_right(src1, src2)
+    ```
+  </Tab>
+
+  <Tab title="Comparison">
+    ```rust
+    0x20  LT    dst, src1, src2  - dst = (src1 < src2) ? 1 : 0
+    0x21  GT    dst, src1, src2  - dst = (src1 > src2) ? 1 : 0
+    0x22  EQ    dst, src1, src2  - dst = (src1 == src2) ? 1 : 0
+    0x23  ISZERO dst, src1       - dst = (src1 == 0) ? 1 : 0
+    0x24  SLT   dst, src1, src2  - dst = (src1 < src2) ? 1 : 0 (signed)
+    0x25  SGT   dst, src1, src2  - dst = (src1 > src2) ? 1 : 0 (signed)
+    ```
+  </Tab>
+
+  <Tab title="Memory">
+    ```rust
+    0x30  MLOAD  dst, src1       - dst = memory[src1]
+    0x31  MSTORE src1, src2      - memory[src1] = src2
+    0x32  MLOAD8 dst, src1       - dst = memory[src1] (8-bit)
+    0x33  MSTORE8 src1, src2     - memory[src1] = src2 (8-bit)
+    0x34  MCOPY  dst, src, len   - memcpy(dst, src, len)
+    ```
+  </Tab>
+
+  <Tab title="Storage">
+    ```rust
+    0x40  SLOAD  dst, key        - dst = storage[key]
+    0x41  SSTORE key, value      - storage[key] = value
+    ```
+  </Tab>
+
+  <Tab title="Control Flow">
+    ```rust
+    0x50  JMP    addr            - pc = addr
+    0x51  JMPI   addr, cond      - if (cond != 0) pc = addr
+    0x52  CALL   addr            - call subroutine at addr
+    0x53  RET                    - return from subroutine
+    0x54  HALT                   - stop execution (success)
+    0x55  REVERT                 - stop execution (revert state)
+    ```
+  </Tab>
+
+  <Tab title="Blockchain Context">
+    ```rust
+    0x80  ADDRESS    dst         - dst = current contract address
+    0x81  BALANCE    dst, addr   - dst = balance of addr
+    0x82  ORIGIN     dst         - dst = transaction origin
+    0x83  CALLER     dst         - dst = message sender
+    0x84  CALLVALUE  dst         - dst = msg.value
+    0x85  CALLDATALOAD dst, idx  - dst = calldata[idx]
+    0x86  CALLDATASIZE dst       - dst = len(calldata)
+    0x87  CODESIZE   dst         - dst = len(code)
+    0x88  GASPRICE   dst         - dst = tx.gasprice
+    0x89  BLOCKHASH  dst, num    - dst = blockhash(num)
+    0x8A  COINBASE   dst         - dst = block.coinbase
+    0x8B  TIMESTAMP  dst         - dst = block.timestamp
+    0x8C  NUMBER     dst         - dst = block.number
+    0x8D  GASLIMIT   dst         - dst = block.gaslimit
+    0x8E  CHAINID    dst         - dst = chain_id
+    ```
+  </Tab>
+
+  <Tab title="External Calls">
+    ```rust
+    0x90  EXTCALL addr, gas, value, argsOffset, argsSize, retOffset, retSize
+    0x91  EXTDELEGATECALL addr, gas, argsOffset, argsSize, retOffset, retSize
+    0x92  EXTSTATICCALL addr, gas, argsOffset, argsSize, retOffset, retSize
+    0x93  CREATE value, offset, size, salt
+    0x94  CREATE2 value, offset, size, salt
+    0x95  SELFDESTRUCT beneficiary
+    ```
+  </Tab>
+</Tabs>
+
+## Gas Model
+
+### Base Costs
+
+| Operation | Gas Cost |
+|-----------|----------|
+| Arithmetic | 3 gas |
+| Bitwise | 3 gas |
+| Comparison | 3 gas |
+| Memory load | 3 gas |
+| Memory store | 3 gas |
+| Storage load (cold) | 200 gas |
+| Storage load (warm) | 100 gas |
+| Storage store (cold) | 5000 gas |
+| Storage store (warm) | 200 gas |
+| Jump | 8 gas |
+| Call | 100 gas + target gas |
+| Create | 32000 gas |
+| Log | 375 gas + 375 per topic + 8 per byte |
+
+### Memory Expansion Cost
+
+```
+memory_cost = (memory_size_word ** 2) / 512 + (3 * memory_size_word)
+```
+
+## Execution Model
+
+### Contract Execution Flow
+
+<Steps>
+  <Step title="Load Contract">
+    Load contract bytecode from state
+  </Step>
+
+  <Step title="Initialize VM">
+    ```rust
+    pc = 0
+    gas = tx.gas_limit
+    registers = [0; 32]
+    memory = empty
+    ```
+  </Step>
+
+  <Step title="Execute Instructions">
+    Execute until HALT/REVERT/OUT_OF_GAS
+  </Step>
+
+  <Step title="Return Result">
+    Return result + remaining gas + state changes
+  </Step>
+</Steps>
+
+### Call Stack
+
+- **Max depth**: 1024 calls
+- **Each frame stores**:
+  - Return address (pc)
+  - Saved registers (r0-r31)
+  - Local variables
+  - Gas limit for this call
+
+## Syscall Interface
+
+ArgusVM provides a syscall interface for cryptographic operations:
+
+| ID | Name | Input | Output |
+|----|------|-------|--------|
+| 0 | ecrecover | hash, v, r, s | address |
+| 1 | sha256 | data, len | hash |
+| 2 | keccak256 | data, len | hash |
+| 3 | blake2b | data, len | hash |
+| 4 | verify_ed25519 | msg, sig, pubkey | bool |
+| 5 | verify_secp256k1 | msg, sig, pubkey | bool |
+| 6 | bls_verify | msg, sig, pubkey | bool |
+| 7 | bls_aggregate | sigs[], len | aggregated_sig |
+| 8 | modexp | base, exp, mod | result |
+| 9 | bn256_add | x1, y1, x2, y2 | x3, y3 |
+| 10 | bn256_mul | x, y, scalar | x2, y2 |
+| 11 | bn256_pairing | points[], len | bool |
+
+## Precompiled Contracts
+
+Standard precompiles for common cryptographic operations:
+
+| Address | Name | Purpose |
+|---------|------|---------|
+| 0x01 | ECRecover | ECDSA signature recovery |
+| 0x02 | SHA256 | SHA-256 hash |
+| 0x03 | RIPEMD160 | RIPEMD-160 hash |
+| 0x04 | Identity | Data copy |
+| 0x05 | ModExp | Modular exponentiation |
+| 0x06 | BN256Add | BN256 elliptic curve addition |
+| 0x07 | BN256Mul | BN256 elliptic curve multiplication |
+| 0x08 | BN256Pairing | BN256 pairing check |
+| 0x09 | Blake2F | Blake2b F compression |
+| 0x0A | BLS12Verify | BLS12-381 signature verification |
+| 0x0B | BLS12Aggregate | BLS12-381 signature aggregation |
+
+## Bytecode Format
+
+### File Structure
+
+```
+┌─────────────────────────┐
+│  Magic Number (4 bytes) │  0x41564D00 ("AVM\0")
+├─────────────────────────┤
+│  Version (2 bytes)      │  0x0001
+├─────────────────────────┤
+│  Code Size (4 bytes)    │  Length of code section
+├─────────────────────────┤
+│  Data Size (4 bytes)    │  Length of data section
+├─────────────────────────┤
+│  Code Section           │  Executable instructions
+│  (variable length)      │
+├─────────────────────────┤
+│  Data Section           │  Initialized constants
+│  (variable length)      │
+├─────────────────────────┤
+│  Metadata Section       │  ABI, source map, etc.
+│  (variable length)      │
+└─────────────────────────┘
+```
+
+### Instruction Encoding Example
+
+```rust
+// Example: ADD r1, r2, r3
+// Encoding: 0x01 0x01 0x02 0x03 0x00000000
+┌────────┬────────┬────────┬────────┬────────────────┐
+│ opcode │  dst   │  src1  │  src2  │   immediate    │
+│ 0x01   │ 0x01   │ 0x02   │ 0x03   │ 0x00000000     │
+└────────┴────────┴────────┴────────┴────────────────┘
+```
+
+## Determinism Guarantees
+
+### Prohibited (Non-Deterministic)
+
+<Warning>
+The following are **prohibited** in ArgusVM contracts:
+</Warning>
+
+- ❌ System time (use `block.timestamp`)
+- ❌ Random numbers (use `block.hash + nonce`)
+- ❌ Floating point (use fixed-point arithmetic)
+- ❌ Hash map iteration order (use sorted keys)
+- ❌ External I/O (only syscalls allowed)
+
+### Enforced Determinism
+
+- ✅ All arithmetic is 256-bit integer (no floats)
+- ✅ Division by zero returns 0 (no exceptions)
+- ✅ Out-of-bounds memory access reverts
+- ✅ All randomness from blockchain state
+- ✅ Fixed gas costs per operation
+
+## Security Features
+
+<CardGroup cols={2}>
+  <Card title="Sandboxing" icon="shield">
+    - No file system access
+    - No network access
+    - No system calls except whitelisted syscalls
+    - Memory isolation between contracts
+  </Card>
+  <Card title="Gas Limits" icon="gauge">
+    - Prevents infinite loops
+    - Prevents DoS attacks
+    - Ensures bounded execution time
+  </Card>
+  <Card title="Reentrancy Protection" icon="lock">
+    - Call depth limit: 1024
+    - State changes committed only on success
+    - Revert cascades up call stack
+  </Card>
+  <Card title="Overflow Protection" icon="calculator">
+    - Built-in overflow checks
+    - Safe arithmetic by default
+    - No need for SafeMath library
+  </Card>
+</CardGroup>
+
+## Performance Characteristics
+
+### Expected Performance
+
+| Metric | Value |
+|--------|-------|
+| **Throughput** | 10,000+ simple transactions/sec per core |
+| **Latency** | <1ms per simple contract call |
+| **Memory** | <100MB per VM instance |
+| **Startup** | <10ms to initialize VM |
+
+### Optimization Strategies
+
+- JIT compilation for hot paths (future)
+- Register allocation optimization
+- Instruction fusion (combine common patterns)
+- Lazy memory allocation
+
+## Comparison to Other VMs
+
+| Feature | ArgusVM | EVM | WASM |
+|---------|---------|-----|------|
+| **Architecture** | Register | Stack | Stack |
+| **Word Size** | 256-bit | 256-bit | 32/64-bit |
+| **Gas Metering** | Yes | Yes | External |
+| **Deterministic** | Yes | Yes | Depends |
+| **Precompiles** | Yes | Yes | No |
+| **JIT Support** | Future | No | Yes |
+| **EVM Compatible** | Yes | N/A | No |
+| **EVM Dependent** | **No** | **Yes** | No |
+
+<Note>
+**Key Differentiator:** ArgusVM is the only VM that is **EVM-compatible but not EVM-dependent**, enabling full ecosystem independence.
+</Note>
+
+## EVM Compatibility Layer
+
+While ArgusVM is independent, we maintain full EVM compatibility through a translation layer:
+
+<AccordionGroup>
+  <Accordion title="Bytecode Translation" icon="code">
+    EVM bytecode can be translated to AVM bytecode:
+    
+    - Stack operations → Register operations
+    - EVM opcodes → AVM opcodes
+    - Gas costs normalized
+    - Behavior preserved
+  </Accordion>
+
+  <Accordion title="Tooling Support" icon="wrench">
+    Existing Ethereum tooling works with ArgusVM:
+    
+    - Hardhat, Foundry, Remix support
+    - MetaMask and other wallets
+    - Block explorers
+    - Bridge protocols
+  </Accordion>
+
+  <Accordion title="Migration Path" icon="arrow-right">
+    Seamless migration for developers:
+    
+    1. Deploy existing Solidity contracts (via translation)
+    2. Gradually migrate to OpenLang
+    3. Optimize for ArgusVM architecture
+    4. Leverage native performance benefits
+  </Accordion>
+</AccordionGroup>
+
+## OpenLang Integration
+
+ArgusVM is designed to work with **OpenLang**, Paxeer's Rust-inspired smart contract language:
+
+```rust
+// OpenLang example
+contract MyToken {
+    state balance: Map<address, u256>;
+    
+    pub fn transfer(to: address, amount: u256) -> bool {
+        require(balance[msg.sender] >= amount, "insufficient balance");
+        balance[msg.sender] -= amount;
+        balance[to] += amount;
+        return true;
+    }
+}
+```
+
+<Card title="OpenLang → ArgusVM Compilation" icon="code">
+  OpenLang compiles directly to ArgusVM bytecode:
+  
+  - Rust-inspired syntax
+  - Type safety
+  - Built-in overflow protection
+  - Optimized register allocation
+</Card>
+
+## Roadmap
+
+<Steps>
+  <Step title="Phase 1: Core Implementation">
+    - VM core in Go
+    - Bytecode assembler
+    - Test suite
+  </Step>
+
+  <Step title="Phase 2: Language & Tooling">
+    - OpenLang compiler
+    - OpenLang → AVM compiler
+    - Development tools
+  </Step>
+
+  <Step title="Phase 3: EVM Translation">
+    - EVM → AVM bytecode translator
+    - Compatibility testing
+    - Migration tools
+  </Step>
+
+  <Step title="Phase 4: Optimization">
+    - JIT compilation
+    - Performance tuning
+    - Production deployment
+  </Step>
+</Steps>
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card
+    title="OpenLang Documentation"
+    icon="book"
+    href="/openlang"
+  >
+    Learn OpenLang syntax
+  </Card>
+  <Card
+    title="OPAX-28 Token Standard"
+    icon="coins"
+    href="/opax-28"
+  >
+    Native token standard for ArgusVM
+  </Card>
+  <Card
+    title="Smart Contracts"
+    icon="file-contract"
+    href="/contracts"
+  >
+    Deploy contracts on Paxeer
+  </Card>
+  <Card
+    title="API Reference"
+    icon="terminal"
+    href="/api-reference"
+  >
+    RPC and API documentation
+  </Card>
+</CardGroup>
+
+## Conclusion
+
+ArgusVM represents Paxeer Network's commitment to building a **fully self-sustainable ecosystem** while maintaining **EVM compatibility**. By combining register-based architecture, 256-bit native arithmetic, and deterministic execution, ArgusVM provides the foundation for Paxeer to become the **first EVM L2 to transition into EVM-compatibility without EVM-dependency**.
+
+<Note>
+**Join the Revolution:** Build on ArgusVM and be part of the future of blockchain execution environments. Start with [OpenLang](/openlang) and [OPAX-28](/opax-28) today!
+</Note>
+
