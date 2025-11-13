@@ -123,10 +123,10 @@ Transactions
 
 ### Global Anchors (Quick Access Bar)
 - 🔍 **Explorer** → https://scan.paxeer.app
-- 🔄 **PaxDex** → https://dex.paxeer.app
-- 💧 **Faucet** → https://faucet.paxeer.app
-- 📊 **Status** → https://status.paxeer.app
-- 💬 **Discord** → https://discord.gg/paxeer
+- 🔄 **Sidiora Exchange** → https://sidiora.exchange
+- 🔄 **Sidiora Swap** → https://swap.sidiora.exchange
+- 📊 **White Paper** → https://status.paxeer.app
+- 🌐 **Discord** → https://chainflowtrading.com
 
 ### Navigation Bar
 - Links: Website, Community, Blog, Support
