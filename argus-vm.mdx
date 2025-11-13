@@ -340,24 +340,24 @@ Standard precompiles for common cryptographic operations:
 ### File Structure
 
 ```
-┌─────────────────────────┐
-│  Magic Number (4 bytes) │  0x41564D00 ("AVM\0")
-├─────────────────────────┤
-│  Version (2 bytes)      │  0x0001
-├─────────────────────────┤
-│  Code Size (4 bytes)    │  Length of code section
-├─────────────────────────┤
-│  Data Size (4 bytes)    │  Length of data section
-├─────────────────────────┤
-│  Code Section           │  Executable instructions
-│  (variable length)      │
-├─────────────────────────┤
-│  Data Section           │  Initialized constants
-│  (variable length)      │
-├─────────────────────────┤
-│  Metadata Section       │  ABI, source map, etc.
-│  (variable length)      │
-└─────────────────────────┘
+┌──────────────────────┐
+│Magic Number (4 bytes)│ 0x41564D00 ("AVM\0")
+├──────────────────────┤
+│ Version (2 bytes)    │ 0x0001
+├──────────────────────┤
+│ Code Size (4 bytes)  │ Length of code section
+├──────────────────────┤
+│ Data Size (4 bytes)  │ Length of data section
+├──────────────────────┤
+│ Code Section         │ Executable instructions
+│ (variable length)    │
+├──────────────────────┤
+│  Data Section        │ Initialized constants
+│ (variable length)    │
+├──────────────────────┤
+│  Metadata Section    │ ABI, source map, etc.
+│  (variable length)   │
+└──────────────────────┘
 ```
 
 ### Instruction Encoding Example
