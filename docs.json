@@ -41,10 +41,10 @@
   },
   "footer": {
     "socials": {
-      "discord": "https://discord.gg/paxeer",
-      "twitter": "https://twitter.com/paxeernetwork",
-      "github": "https://github.com/paxeer",
-      "website": "https://paxeer.app"
+      "telegram": "https://t.me/paxeer",
+      "twitter": "https://twitter.com/paxeer_app",
+      "github": "https://github.com/paxeer-network",
+      "website": "https://www.paxeer.app"
     }
   },
   "navigation": {
@@ -180,24 +180,24 @@
           "icon": "magnifying-glass"
         },
         {
-          "anchor": "PaxDex",
-          "href": "https://dex.paxeer.app",
+          "anchor": "Sidiora Exchange",
+          "href": "https://sidiora.exchange",
           "icon": "arrow-right-arrow-left"
         },
         {
-          "anchor": "Faucet",
-          "href": "https://faucet.paxeer.app",
-          "icon": "faucet"
+          "anchor": "Sidiora Swap",
+          "href": "https://swap.sidiora.exchange",
+          "icon": "arrow-right-arrow-left"
+        },
+        {
+          "anchor": "White-Paper",
+          "href": "https://whitepaper.paxeer.app",
+          "icon": "paper"
         },
         {
           "anchor": "Status",
           "href": "https://status.paxeer.app",
           "icon": "signal-bars"
-        },
-        {
-          "anchor": "Discord",
-          "href": "https://discord.gg/paxeer",
-          "icon": "discord"
         }
       ]
     }
@@ -210,7 +210,7 @@
     "links": [
       {
         "label": "Website",
-        "href": "https://paxeer.app"
+        "href": "https://www.paxeer.app"
       },
       {
         "label": "Community",
@@ -222,7 +222,7 @@
       },
       {
         "label": "Support",
-        "href": "https://discord.gg/paxeer"
+        "href": "https://t.me/paxeer"
       }
     ],
     "primary": {
@@ -234,13 +234,13 @@
   "topbarLinks": [
     {
       "name": "GitHub",
-      "url": "https://github.com/paxeer"
+      "url": "https://github.com/paxeer-network"
     }
   ],
   "topbarCtaButton": {
     "type": "button",
     "name": "Launch App",
-    "url": "https://app.paxeer.app"
+    "url": "https://scan.paxeer.app"
   },
   "analytics": {
     "ga4": {
