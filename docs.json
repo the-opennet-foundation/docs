@@ -176,17 +176,17 @@
       "anchors": [
         {
           "anchor": "Explorer",
-          "href": "https://scan.paxeer.app",
+          "href": "https://paxscan.paxeer.app",
           "icon": "magnifying-glass"
         },
         {
           "anchor": "Sidiora Exchange",
-          "href": "https://sidiora.exchange",
+          "href": "https://org.sidiora.exchange",
           "icon": "arrow-right-arrow-left"
         },
         {
-          "anchor": "Sidiora Swap",
-          "href": "https://swap.sidiora.exchange",
+          "anchor": "Sidiora Trade",
+          "href": "https://trade.sidiora.exchange",
           "icon": "arrow-right-arrow-left"
         },
         {
@@ -195,8 +195,8 @@
           "icon": "paper"
         },
         {
-          "anchor": "Status",
-          "href": "https://status.paxeer.app",
+          "anchor": "Chainflow",
+          "href": "https://Chainflowtrading.com",
           "icon": "signal-bars"
         }
       ]
@@ -240,7 +240,7 @@
   "topbarCtaButton": {
     "type": "button",
     "name": "Launch App",
-    "url": "https://scan.paxeer.app"
+    "url": "https://paxscan.paxeer.app"
   },
   "analytics": {
     "ga4": {
